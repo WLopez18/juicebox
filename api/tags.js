@@ -21,8 +21,14 @@ tagsRouter.get('/:tagName/posts', async (req, res, next) => {
     const { tagName } = req.params;
     try {
         const tagNames = await getPostsByTagName(tagName);
+        if(req.user){
+            const userPosts = tagNames.filter( post => post.authorId === req.user.id)
+            res.send({posts: userPosts})
+            }
+       
         res.send({
             posts: tagNames
+        
         });
         // send out an object to the client { posts: // the posts }
     } catch ({ name, message }) {
